@@ -64,3 +64,45 @@ This project follows the Conventional Commits specification:
 
 ✅ Antigravity configuration added
 
+
+
+\## Getting Started
+
+
+
+\### Prerequisites
+
+Ensure you have the following installed on your system:
+
+\- \*\*Node.js\*\*: v18.x or higher (LTS recommended)
+
+\- \*\*Git\*\*: v2.x or higher
+
+\- \*\*Google Antigravity CLI\*\*
+
+
+
+\### Environment Verification
+
+To verify that your local environment matches this setup, run:
+
+
+
+```bash
+
+\# Check Node.js version
+
+node -v
+
+
+
+\# Check Git version
+
+git --version
+
+
+
+\# Check Antigravity CLI installation
+
+agy --version
+
