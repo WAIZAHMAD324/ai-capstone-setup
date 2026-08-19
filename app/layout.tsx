@@ -27,6 +27,7 @@ const navLinks = [
   { href: "/history", label: "History" },
   { href: "/settings", label: "Settings" },
   { href: "/health", label: "Health" },
+  { href: "/playground", label: "Playground" }
 ];
 
 export default function RootLayout({
