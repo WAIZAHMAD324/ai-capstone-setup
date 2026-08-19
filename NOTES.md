@@ -1,42 +1,74 @@
-# NOTES.md — Manual A11y Components vs shadcn/ui (Radix)
+# NOTES — A11y Playground (Manual vs shadcn/ui)
 
-## What I built by hand (playground/)
-I built 3 components from scratch in React + TypeScript (no component libraries):
-- Disclosure
-- Tabs
-- Modal Dialog
+## What I built by hand (in /playground)
+I implemented three interactive widgets from scratch in React + TypeScript (no component libs):
 
-All tested keyboard-only (Tab, Shift+Tab, Enter/Space, Arrow keys, Escape).
+1) **Disclosure**
+- Button uses `aria-expanded` and `aria-controls`
+- Content uses `role="region"` and `aria-labelledby`
+- Keyboard: Tab to button, Enter/Space toggles
 
-## Modal: My implementation vs shadcn/ui Dialog (Radix)
+2) **Tabs** (manual activation)
+- Tabs use `role="tablist"`, each tab `role="tab"` with `aria-selected` + `aria-controls`
+- Panels use `role="tabpanel"` with `aria-labelledby`
+- Roving `tabIndex` (only one tab is tabbable at a time)
+- Keyboard:
+  - ArrowLeft/ArrowRight: move focus between tabs
+  - Home/End: jump to first/last
+  - Enter/Space: activate selected tab
 
-### Gaps / things shadcn (Radix) handles better (at least 2)
-1) **More robust focus management**
-   - Radix handles focus trapping + focus guards + edge cases (nested dialogs, tricky DOM cases) in a well-tested way.
-   - My modal uses a manual `keydown` listener + querySelector focusables, which can miss edge cases.
+3) **Modal Dialog**
+- Dialog uses `role="dialog"`, `aria-modal="true"`, and `aria-labelledby`
+- Focus management:
+  - On open: focus moves inside dialog (first focusable, otherwise dialog itself)
+  - Focus trap: Tab / Shift+Tab stays inside
+  - Escape closes
+  - On close: focus returns to previously-focused element
 
-2) **Better “background isolation”**
-   - Radix more reliably prevents interaction with the background (and manages stacking via Portal).
-   - My modal is visually an overlay and traps focus, but the rest of the page is still “there” and can be tricky for assistive tech in complex apps.
 
-3) **Portal + layering**
-   - shadcn uses `DialogPortal` so dialog renders in a stable top layer (less z-index/overflow bugs).
-   - My modal renders inline; parent overflow/z-index could break it.
+## What shadcn/ui (Radix) handled that my manual version can miss
 
-4) **Description semantics**
-   - Radix supports `DialogDescription` easily (aria-describedby pattern).
-   - My modal only wires the title (`aria-labelledby`) and I didn’t implement `aria-describedby`.
+### Dialog (components/ui/dialog.tsx)
+Concrete gaps / differences I noticed:
 
-## Tabs: My implementation vs shadcn/ui Tabs (Radix)
+1) **Robust focus management + focus guards**
+- Radix handles focus trapping more reliably (including edge cases like nested dialogs / multiple layers).
+- My version traps focus using a document keydown listener and manual querying, which is easier to break in complex cases.
 
-1) **APG behavior is built-in and tested**
-   - Radix handles ARIA wiring + keyboard behavior across cases.
-   - My tabs work for basic use, but could miss advanced cases (orientation, dynamic tabs, etc).
+2) **Background interaction blocking**
+- Radix prevents interacting with the background in more complete ways.
+- My version mainly prevents focus from leaving, but it does not “inert/hide” the rest of the page for assistive tech.
 
-2) **Better state hooks for styling**
-   - shadcn/Radix provides `data-state` attributes etc for styling and consistent behavior.
+3) **Portals and layering**
+- shadcn uses a Portal (`DialogPortal`) so the dialog renders at a stable DOM root layer.
+- My version renders inline; z-index/stacking and parent overflow can cause issues in real layouts.
 
-## Resources
-- ARIA APG Dialog (Modal): https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/
-- ARIA APG Tabs: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
-- shadcn/ui: https://ui.shadcn.com/
+4) **Accessible close button pattern**
+- shadcn close button includes an icon + `sr-only` text (“Close”) which is a reliable screen-reader label.
+- My version uses `aria-label="Close dialog"` which is fine, but shadcn’s pattern is more consistent and reusable.
+
+5) **Title/Description primitives**
+- shadcn exposes `DialogTitle` and `DialogDescription` primitives.
+- My modal only guarantees `aria-labelledby` (title), but I didn’t implement `aria-describedby` support for description.
+
+### Tabs (components/ui/tabs.tsx)
+Concrete gaps / differences I noticed:
+
+1) **Radix handles full ARIA/keyboard behavior via primitives**
+- It provides a well-tested tabs pattern with roving focus and correct ARIA wiring internally.
+- My version works, but it’s more likely to miss edge cases (dynamic tab lists, multiple tabsets, direction/orientation changes).
+
+2) **State + styling hooks**
+- shadcn/Radix components expose useful state attributes like `data-state` which makes styling and testing easier.
+- My version manually computes selected/focus state and styles.
+
+3) **More complete behavior across variants**
+- Radix supports additional behaviors (orientation, looping rules, more consistent disabled handling).
+- I implemented a basic horizontal tablist with manual activation.
+
+
+## Resources followed
+- W3C ARIA Authoring Practices:
+  - Dialog (Modal): https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/
+  - Tabs: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
+- shadcn/ui docs: https://ui.shadcn.com/

@@ -30,9 +30,9 @@ export default function HomePage() {
       <section className="text-center py-12 sm:py-20">
         <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
           Study Smarter with{" "}
-          <span className="text-[var(--primary)]">AI Study Buddy</span>
+          <span className="text-[var(--muted-foreground)]">AI Study Buddy</span>
         </h1>
-        <p className="mt-6 text-lg sm:text-xl text-[var(--muted)] max-w-2xl mx-auto">
+        <p className="mt-6 text-lg sm:text-xl text-[var(--muted-foreground)] max-w-2xl mx-auto">
           Your smart companion for smarter studying. Chat with AI, summarize notes,
           and generate quizzes — all in one place.
         </p>
@@ -63,7 +63,7 @@ export default function HomePage() {
               className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 hover:border-[var(--primary)] hover:shadow-lg transition-all"
             >
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-[var(--muted)] text-sm">{feature.description}</p>
+              <p className="text-[var(--muted-foreground)] text-sm">{feature.description}</p>
             </Link>
           ))}
         </div>

@@ -24,21 +24,21 @@ export default async function HealthPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <h1 className="text-4xl font-bold">🩺 Health Check</h1>
-      <p className="mt-4 text-lg text-[var(--muted)]">
+      <p className="mt-4 text-lg text-[var(--muted-foreground)]">
         System status and live data fetch from external API.
       </p>
 
       {/* Status Cards */}
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
-          <p className="text-sm text-[var(--muted)]">App Status</p>
+          <p className="text-sm text-[var(--muted-foreground)]">App Status</p>
           <p className="mt-2 text-2xl font-bold text-[var(--success)]">
             ✅ Online
           </p>
         </div>
 
         <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
-          <p className="text-sm text-[var(--muted)]">API Status</p>
+          <p className="text-sm text-[var(--muted-foreground)]">API Status</p>
           <p className="mt-2 text-2xl font-bold">
             {data ? (
               <span className="text-[var(--success)]">✅ Connected</span>
@@ -49,7 +49,7 @@ export default async function HealthPage() {
         </div>
 
         <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
-          <p className="text-sm text-[var(--muted)]">Last Checked</p>
+          <p className="text-sm text-[var(--muted-foreground)]">Last Checked</p>
           <p className="mt-2 text-sm font-mono">{timestamp}</p>
         </div>
       </div>
@@ -57,7 +57,7 @@ export default async function HealthPage() {
       {/* Fetched Data */}
       <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">📡 Live Data from API</h2>
-        <p className="text-sm text-[var(--muted)] mb-4">
+        <p className="text-sm text-[var(--muted-foreground)] mb-4">
           Source: <code className="rounded bg-[var(--secondary)] px-2 py-1 text-xs">jsonplaceholder.typicode.com</code>
         </p>
 
@@ -68,13 +68,13 @@ export default async function HealthPage() {
                 key={post.id}
                 className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 hover:border-[var(--primary)] transition-colors"
               >
-                <div className="text-xs text-[var(--muted)] mb-2">
+                <div className="text-xs text-[var(--muted-foreground)] mb-2">
                   Post #{post.id}
                 </div>
                 <h3 className="text-lg font-semibold mb-2 capitalize">
                   {post.title}
                 </h3>
-                <p className="text-sm text-[var(--muted)] line-clamp-3">
+                <p className="text-sm text-[var(--muted-foreground)] line-clamp-3">
                   {post.body}
                 </p>
               </div>
@@ -92,7 +92,7 @@ export default async function HealthPage() {
       {/* Info Box */}
       <div className="mt-8 rounded-xl border border-[var(--border)] bg-[var(--secondary)] p-6">
         <h3 className="font-semibold mb-2">ℹ️ About this page</h3>
-        <ul className="text-sm text-[var(--muted)] space-y-1 list-disc list-inside">
+        <ul className="text-sm text-[var(--muted-foreground)] space-y-1 list-disc list-inside">
           <li>This is a <strong>Server Component</strong> that fetches data on the server</li>
           <li>Data is cached and revalidated every 60 seconds</li>
           <li>Used to verify the app is deployed and working correctly</li>
