@@ -26,7 +26,6 @@ function readStoredTheme(): ThemeMode | null {
 export function ThemeSwitcher() {
   const [mode, setMode] = React.useState<ThemeMode>("dark");
 
-  // initial load: default dark (if nothing stored)
   React.useEffect(() => {
     const stored = readStoredTheme();
     const initial: ThemeMode = stored ?? "dark";
@@ -47,19 +46,20 @@ export function ThemeSwitcher() {
       aria-label="Theme switcher"
       style={{
         position: "fixed",
-        right: 16,
-        bottom: 16,
+        right: 12,
+        bottom: 12,
         zIndex: 60,
         border: "1px solid var(--border, #333)",
         background: "var(--card, rgba(0,0,0,0.6))",
         color: "var(--foreground, inherit)",
         borderRadius: 12,
-        padding: 10,
+        padding: 8,
         backdropFilter: "blur(8px)",
-        width: 180,
+        width: "min(180px, calc(100vw - 24px))",
+        maxWidth: 180,
       }}
     >
-      <div style={{ fontWeight: 800, marginBottom: 8 }}>Theme</div>
+      <div style={{ fontWeight: 800, marginBottom: 6 }}>Theme</div>
 
       <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
         <legend style={{ position: "absolute", left: -9999 }}>Theme</legend>
@@ -71,7 +71,7 @@ export function ThemeSwitcher() {
               display: "flex",
               alignItems: "center",
               gap: 8,
-              padding: "6px 8px",
+              padding: "5px 8px",
               borderRadius: 10,
               cursor: "pointer",
               userSelect: "none",
