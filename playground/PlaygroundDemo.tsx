@@ -16,8 +16,7 @@ export function PlaygroundDemo() {
         </h2>
         <Disclosure title="What is Disclosure?">
           <p style={{ margin: 0 }}>
-            Button click se content show/hide hota hai. Keyboard: Tab se button
-            pe jao, Enter/Space se toggle.
+            This is a simple show/hide pattern. Keyboard: Tab to the button, Enter/Space to toggle.
           </p>
         </Disclosure>
       </section>
@@ -34,8 +33,7 @@ export function PlaygroundDemo() {
           ]}
         />
         <p style={{ marginTop: 10, opacity: 0.85 }}>
-          Keyboard: Left/Right arrows se focus move, Enter/Space se select,
-          Home/End bhi.
+          Keyboard: Left/Right arrows move focus, Enter/Space selects. Home/End also work.
         </p>
       </section>
 
@@ -61,13 +59,12 @@ export function PlaygroundDemo() {
         </button>
 
         <p style={{ marginTop: 10, opacity: 0.85 }}>
-          Keyboard: Tab se focus trap test karo, Escape se close, close pe focus
-          wapas “Open Modal” pe ana chahiye.
+          Keyboard: Test focus trap with Tab/Shift+Tab, Escape closes, and focus should return to “Open Modal”.
         </p>
 
         <Modal open={open} title="Demo Modal" onClose={() => setOpen(false)}>
           <p style={{ marginTop: 0 }}>
-            Yahan multiple focusable cheezen hain taake focus trap check ho.
+            This dialog includes multiple focusable elements so you can verify focus trapping.
           </p>
 
           <label style={{ display: "block", marginTop: 10 }}>
