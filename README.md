@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Study Buddy (Capstone)
 
-## Getting Started
+AI Study Buddy is a small Next.js web app for students that turns messy study/meeting notes into clean, structured insights (summary, key decisions, and actionable tasks). I built it to practice shipping a production-ready frontend: accessible UI, meaningful AI integration, validation + error handling, tests, and live deployment.
 
-First, run the development server:
+## Live Demo
+- Production URL: https://ai-study-buddy-nine-black.vercel.app
+- Notes page: https://ai-study-buddy-nine-black.vercel.app/notes
+- Repository: https://github.com/WAIZAHMAD324/ai-capstone-setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS
+- AI: Google Gemini (Free tier)
+- Validation: Zod
+- Testing: Vitest + React Testing Library (jsdom)
+- Deployment: Vercel (auto-deploy from `capstone` branch)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup (Local)
+1) Install dependencies (Windows note: may require legacy peer deps)
+- Run: `npm install --legacy-peer-deps`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2) Add environment variable
+- Create file: `.env.local` (project root)
+- Add: `GEMINI_API_KEY=YOUR_KEY_HERE`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3) Start dev server
+- Run: `npm run dev`
+- Open: http://localhost:3000/notes
 
-## Learn More
+## Architecture Overview
+- `app/notes/page.tsx`
+  - Client UI for entering notes, Load Sample, Clear, loading spinner, and accessible error states.
+  - Renders extracted output and allows toggling action items status in the UI.
+- `app/api/ai/extract/route.ts`
+  - Server route that calls Gemini and returns structured JSON.
+  - Validates input and AI output using Zod (fails safely).
+- `app/dashboard/page.tsx`
+  - Dashboard with shortcuts to main features.
+- `app/playground/*`
+  - Separate accessibility playground (not part of capstone feature; do not modify).
 
-To learn more about Next.js, take a look at the following resources:
+## AI Integration (How it works)
+- Purpose (not a gimmick): converts unstructured notes into structured data the UI can reliably render.
+- Provider: Google Gemini (free tier)
+- Model used: `gemini-flash-lite-latest` (chosen to reduce “high demand / 503” errors seen with other models)
+- Prompt behavior: instructs the model to return ONLY valid JSON (no markdown/code fences) with strict shape:
+  - `summary`: string
+  - `decisions`: string[]
+  - `actionItems`: array of `{ title, owner, dueDate, priority, status }`
+- Reliability:
+  - Server attempts to parse JSON safely
+  - Zod validates response before sending it to the client
+  - If invalid, API returns a clear error (no broken UI)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Resilience & Error Handling
+- Missing `GEMINI_API_KEY` returns a helpful server message.
+- Request validation: notes must be at least 20 characters.
+- UI shows clear loading state + error message (fails safely instead of crashing).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Testing
+- Unit tests added for Notes UI (3 tests).
+- Run tests: `npm test`
 
-## Deploy on Vercel
+## Performance & Accessibility Evidence
+- Lighthouse (mobile) on `/notes`: Performance 88, Accessibility 100
+- WAVE on `/notes`: 0 Errors, 0 Alerts
+- Concrete improvement made from audit:
+  - Removed redundant “Home” nav link (WAVE previously flagged “Redundant link”).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Screenshots (Evidence Files)
+- `1-test-evidence.png` — Vitest tests passing
+- `2-ai-notes-working.png` — Local AI extraction working
+- `3-live-ai-working.png` — Live AI working on Vercel `/notes`
+- `4-lighthouse-mobile-notes.png` — Lighthouse mobile report
+- `5-wave-notes.png` — WAVE report (0 errors, 0 alerts)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment & Operations
+- Vercel Production branch: `capstone`
+- Monitoring: Vercel Deployments + Logs
+- Rollback plan: Vercel dashboard → Deployments → select an older “Ready” deployment → Redeploy
+
+## Deployment Checklist (FE-11 style)
+- [x] App deployed and functional (Production)
+- [x] `GEMINI_API_KEY` set in Vercel Environment Variables (Production)
+- [x] Tests pass locally (`npm test`)
+- [x] Lighthouse mobile ≥ 85 on `/notes`
+- [x] WAVE: 0 Errors, 0 Alerts on `/notes`
+- [x] Safe failure states (loading + error UI)
+- [x] Rollback documented (redeploy previous deployment in Vercel)
+
+## Known Limitations & Future Improvements
+- AI provider can temporarily rate-limit / overload under high demand.
+- Add end-to-end test for the full “paste notes → extract → render output” flow.
+- Add persistence (save action items/history) instead of UI-only state.
+
+## Reflection (Short)
+- Hardest part: model availability/high demand errors and choosing a stable free model.
+- Next time: add E2E tests earlier and add better caching/retry strategy.
+- Surprise learning: accessibility audits catch issues like redundant navigation links quickly and clearly.
