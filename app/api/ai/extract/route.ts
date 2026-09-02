@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { z } from "zod";
 
 export const runtime = "nodejs";
@@ -23,42 +23,14 @@ const ResultSchema = z.object({
     .default([]),
 });
 
-const tool: Anthropic.Tool = {
-  name: "extract_meeting_items",
-  description:
-    "Extract summary, decisions, and action items from meeting/study notes.",
-  input_schema: {
-    type: "object",
-    properties: {
-      summary: { type: "string" },
-      decisions: { type: "array", items: { type: "string" } },
-      actionItems: {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            title: { type: "string" },
-            owner: { type: "string" },
-            dueDate: {
-              type: "string",
-              description: "Use YYYY-MM-DD if you can, otherwise empty string.",
-            },
-            priority: { type: "string", enum: ["low", "medium", "high"] },
-            status: { type: "string", enum: ["open", "done"] },
-          },
-          required: ["title", "priority", "status"],
-        },
-      },
-    },
-    required: ["summary", "decisions", "actionItems"],
-  },
-};
-
 export async function POST(req: Request) {
   try {
-    if (!process.env.ANTHROPIC_API_KEY) {
+    if (!process.env.GEMINI_API_KEY) {
       return Response.json(
-        { error: "Server missing ANTHROPIC_API_KEY" },
+        {
+          error:
+            "Server missing GEMINI_API_KEY. Add it in .env.local and Vercel env.",
+        },
         { status: 500 }
       );
     }
@@ -72,48 +44,66 @@ export async function POST(req: Request) {
       );
     }
 
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const model = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20240620";
-
-    const msg = await client.messages.create({
-      model,
-      max_tokens: 800,
-      temperature: 0.2,
-      system:
-        "You extract structured information from notes. Be concise and accurate. If something is unknown, use empty string or omit.",
-      messages: [
-        {
-          role: "user",
-          content:
-            "Extract summary, decisions, and action items from these notes:\n\n" +
-            parsed.data.text,
-        },
-      ],
-      tools: [tool],
-      tool_choice: { type: "tool", name: tool.name },
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3.6-flash",
     });
 
-    const toolUse = msg.content.find((c) => c.type === "tool_use");
-    if (!toolUse || toolUse.type !== "tool_use") {
+    const prompt = `You extract structured information from study/meeting notes.
+Return ONLY valid JSON (no markdown, no code fences) with this exact shape:
+{
+  "summary": "string",
+  "decisions": ["string"],
+  "actionItems": [
+    {
+      "title": "string",
+      "owner": "string",
+      "dueDate": "YYYY-MM-DD or empty string",
+      "priority": "low" | "medium" | "high",
+      "status": "open" | "done"
+    }
+  ]
+}
+Be concise and accurate. If something is unknown, use empty string.
+
+Notes:
+${parsed.data.text}`;
+
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    let raw = response.text().trim();
+
+    // Remove markdown fences if model adds them
+    if (raw.startsWith("```")) {
+      raw = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+    }
+
+    let json: unknown;
+    try {
+      json = JSON.parse(raw);
+    } catch {
       return Response.json(
-        { error: "AI did not return structured tool output" },
+        { error: "AI returned invalid JSON", raw: raw.slice(0, 300) },
         { status: 502 }
       );
     }
 
-    const result = ResultSchema.safeParse(toolUse.input);
-    if (!result.success) {
+    const validated = ResultSchema.safeParse(json);
+    if (!validated.success) {
       return Response.json(
-        { error: "AI output validation failed", details: result.error.flatten() },
+        {
+          error: "AI output validation failed",
+          details: validated.error.flatten(),
+        },
         { status: 502 }
       );
     }
 
-    return Response.json({ data: result.data });
-  } catch (err) {
-    return Response.json(
-      { error: "Unexpected server error" },
-      { status: 500 }
-    );
+    return Response.json({ data: validated.data });
+  } catch (err: unknown) {
+    console.error("AI extract error:", err);
+    const message =
+      err instanceof Error ? err.message : "Unexpected server error";
+    return Response.json({ error: message }, { status: 500 });
   }
 }

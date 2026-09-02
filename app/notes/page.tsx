@@ -84,7 +84,7 @@ export default function NotesPage() {
           📝 AI Smart Notes & Action Items
         </h1>
         <p className="mt-2 text-base text-[var(--muted-foreground)]">
-          Paste your study group notes, lectures, or meeting transcripts. Claude will automatically extract summaries, key decisions, and actionable tasks.
+          Paste your study group notes, lectures, or meeting transcripts. AI will automatically extract summaries, key decisions, and actionable tasks.
         </p>
       </div>
 
@@ -142,7 +142,7 @@ export default function NotesPage() {
               {loading ? (
                 <>
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  Analyzing with Claude...
+                  Analyzing with AI...
                 </>
               ) : (
                 "⚡ Extract with AI"
