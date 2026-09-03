@@ -5,6 +5,8 @@ AI Study Buddy is a small Next.js web app for students that turns messy study/me
 ## Live Demo
 - Production URL: https://ai-study-buddy-nine-black.vercel.app
 - Notes page: https://ai-study-buddy-nine-black.vercel.app/notes
+- Chat page: https://ai-study-buddy-nine-black.vercel.app/chat
+- Quiz page: https://ai-study-buddy-nine-black.vercel.app/quiz
 - Repository: https://github.com/WAIZAHMAD324/ai-capstone-setup
 
 ## Tech Stack
@@ -34,19 +36,37 @@ AI Study Buddy is a small Next.js web app for students that turns messy study/me
 - `app/api/ai/extract/route.ts`
   - Server route that calls Gemini and returns structured JSON.
   - Validates input and AI output using Zod (fails safely).
+
+- `app/chat/page.tsx`
+  - AI chat UI (English-only) that calls the server route `/api/ai/chat`.
+  - Stores chat messages in localStorage and shows loading + error UI.
+- `app/api/ai/chat/route.ts`
+  - Gemini-powered chat endpoint with validation + safe error responses.
+
+- `app/quiz/page.tsx`
+  - AI quiz generator UI that calls the server route `/api/ai/quiz`.
+  - Shows questions, tracks answers, and displays explanations.
+- `app/api/ai/quiz/route.ts`
+  - Gemini-powered quiz generator returning structured JSON validated with Zod.
+
+- `app/history/page.tsx`
+  - Working History view (localStorage-based).
+- `app/settings/page.tsx`
+  - Working Settings page (localStorage-based preferences).
 - `app/dashboard/page.tsx`
-  - Dashboard with shortcuts to main features.
+  - Simple dashboard with shortcuts to main features.
 - `app/playground/*`
   - Separate accessibility playground (not part of capstone feature; do not modify).
 
 ## AI Integration (How it works)
-- Purpose (not a gimmick): converts unstructured notes into structured data the UI can reliably render.
+- Purpose (not a gimmick): converts unstructured text into structured data (Notes + Quiz) and provides helpful study guidance (Chat).
 - Provider: Google Gemini (free tier)
 - Model used: `gemini-flash-lite-latest` (chosen to reduce “high demand / 503” errors seen with other models)
-- Prompt behavior: instructs the model to return ONLY valid JSON (no markdown/code fences) with strict shape:
-  - `summary`: string
-  - `decisions`: string[]
-  - `actionItems`: array of `{ title, owner, dueDate, priority, status }`
+- This project uses Gemini for:
+  - Smart Notes extraction (`/notes`)
+  - AI Study Chat (`/chat`)
+  - AI Quiz generation (`/quiz`)
+- Prompt behavior (Notes/Quiz): instructs the model to return ONLY valid JSON (no markdown/code fences) with strict shape.
 - Reliability:
   - Server attempts to parse JSON safely
   - Zod validates response before sending it to the client
@@ -54,7 +74,9 @@ AI Study Buddy is a small Next.js web app for students that turns messy study/me
 
 ## Resilience & Error Handling
 - Missing `GEMINI_API_KEY` returns a helpful server message.
-- Request validation: notes must be at least 20 characters.
+- Request validation:
+  - Notes input minimum 20 characters
+  - Quiz material minimum 40 characters
 - UI shows clear loading state + error message (fails safely instead of crashing).
 
 ## Testing
