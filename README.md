@@ -73,6 +73,7 @@ AI Study Buddy is a small Next.js web app for students that turns messy study/me
 - `3-live-ai-working.png` — Live AI working on Vercel `/notes`
 - `4-lighthouse-mobile-notes.png` — Lighthouse mobile report
 - `5-wave-notes.png` — WAVE report (0 errors, 0 alerts)
+- `6-vercel-deploy-ready.png` — Vercel deployments page showing Ready (green)
 
 ## Deployment & Operations
 - Vercel Production branch: `capstone`
