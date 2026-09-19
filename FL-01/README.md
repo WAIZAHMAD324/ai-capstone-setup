@@ -1,24 +1,32 @@
-\# FlyRank AI Internship
+FlyRank AI Internship
+
+FL-01 — AI Workflow Audit
 
 
 
-\## FL-01 — AI Workflow Audit
+Workflow Audit (DOCX):
+
+https://github.com/WAIZAHMAD324/ai-capstone-setup/blob/fl-01-workflow-audit/FL-01/FL-01\_AI\_Workflow\_Audit\_Waiz\_Ahmad.docx
 
 
 
-\### Contents
+Workflow Audit (PDF):
 
-\- \*\*Workflow Audit (DOCX):\*\* \[FL-01\_AI\_Workflow\_Audit\_Waiz\_Ahmad.docx](./FL-01\_AI\_Workflow\_Audit\_Waiz\_Ahmad.docx)
-
-\- \*\*Workflow Audit (PDF):\*\* \[FL-01\_AI\_Workflow\_Audit\_Waiz\_Ahmad.pdf](./FL-01\_AI\_Workflow\_Audit\_Waiz\_Ahmad.pdf)
-
-\- \*\*Claude Project Screenshot (custom instructions):\*\* \[claude-project.png](./screenshots/claude-project.png)
-
-\- \*\*Anthropic Academy Certificate:\*\* \[ai-fluency-certificate.png](./screenshots/ai-fluency-certificate.png)
+https://github.com/WAIZAHMAD324/ai-capstone-setup/blob/fl-01-workflow-audit/FL-01/FL-01\_AI\_Workflow\_Audit\_Waiz\_Ahmad.pdf
 
 
 
-\### Prepared by
+Claude Project Screenshot (custom instructions):
 
-\*\*Waiz Ahmad\*\* — BSIT Student, AI Frontend Engineer Intern
+https://github.com/WAIZAHMAD324/ai-capstone-setup/blob/fl-01-workflow-audit/FL-01/screenshots/claude-project.png
+
+
+
+Anthropic Academy Certificate:
+
+https://github.com/WAIZAHMAD324/ai-capstone-setup/blob/fl-01-workflow-audit/FL-01/screenshots/ai-fluency-certificate.png
+
+
+
+Prepared by: Waiz Ahmad — BSIT Student, AI Frontend Engineer Intern
 
