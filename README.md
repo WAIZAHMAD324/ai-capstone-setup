@@ -19,3 +19,17 @@ Just open `index.html` in your browser.
 - Replace placeholder project titles/descriptions
 - Add real links (Live / Code)
 - Add 1–2 screenshots per project in `assets/img`
+
+## Evidence (screenshots)
+Portfolio page (top to bottom):
+- `assets/img/portfolio-page-01.png`
+- `assets/img/portfolio-page-02.png`
+- `assets/img/portfolio-page-03.png`
+
+Project proof screenshots:
+- `assets/img/study-buddy.png`
+- `assets/img/keyboard-playground.png`
+
+Notes:
+- I used real screenshots for proof instead of AI-generated images.
+- I kept one accent color and minimal UI so the design frames the work.
