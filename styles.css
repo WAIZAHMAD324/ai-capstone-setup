@@ -113,3 +113,14 @@ section{ margin: 0 0 34px; }
   outline-offset: 3px;
   border-radius: 10px;
 }
+
+/* Project screenshots (proof images) */
+.project-shot{
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 12px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0d0f16;
+}
