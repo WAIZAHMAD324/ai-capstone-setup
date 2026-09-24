@@ -1,0 +1,13 @@
+RUN 1 — NotebookLM OUTPUT
+Source: FL-01 Workflow Audit
+Date:
+Tool: NotebookLM
+
+Q1: Summarize the core concept of this source in plain language.
+A1:
+
+Q2: What are the 5 most important points a student should retain?
+A2:
+
+Q3: What questions might a professor or reviewer ask to test understanding of this material?
+A3:
