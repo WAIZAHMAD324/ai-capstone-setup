@@ -1,0 +1,3 @@
+Summarize the core concept of this source in plain language.
+What are the 5 most important points a student should retain?
+What questions might a professor or reviewer ask to test understanding of this material?
